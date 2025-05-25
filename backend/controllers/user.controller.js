@@ -1,13 +1,18 @@
 const Data = require("../models/Data");
+const User = require("../models/User");
 
 const getData = async (req, res) => {
   try {
     const data = await Data.find({ userId: req.user.id });
-    if (!data || data.length === 0) {
-      return res.status(404).json({ message: "No data found for this user" });
-    }
-    res.status(200).json({ data });
+    const userdetails =  await User.findById({_id: req.user.id});
+    // if (!data || data.length === 0) {
+    //   console.log("No data found for this user");
+    //   return res.status(404).json({ message: "No data found for this user" });
+
+    // }
+    res.status(200).json({ data, userdetails });
   } catch (error) {
+    // console.error("Error fetching data:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

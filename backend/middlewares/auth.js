@@ -4,6 +4,7 @@ const auth = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
         const token = authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
+        // console.log("Token:", token);
         if (!token) {
             return res.status(401).json({ message: "No token provided" });
         }
@@ -13,6 +14,7 @@ const auth = async (req, res, next) => {
         // console.log("User authenticated:", req.user);
         next();
     } catch (error) {
+        console.error("Authentication error:", error);
         return res.status(401).json({ message: `Unauthorized ${error.message}` });
     }
 };
