@@ -6,27 +6,15 @@ import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
 import LoadingSpinner from './components/LoadingSpinner';
 
-// Protected Route Component
-const ProtectedRoute = ({ children }) => {
+
+const AppContent = () => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+  if (loading) return <LoadingSpinner />;
 
-  return isAuthenticated ? children : <Navigate to="/" replace />;
+  return isAuthenticated ? <Dashboard /> : <Welcome />;
 };
 
-// Public Route Component (redirect if authenticated)
-const PublicRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  return !isAuthenticated ? children : <Navigate to="/dashboard" replace />;
-};
 
 // App Routes Component
 const AppRoutes = () => {
@@ -35,19 +23,10 @@ const AppRoutes = () => {
       <Route 
         path="/" 
         element={
-          <PublicRoute>
-            <Welcome />
-          </PublicRoute>
+        <AppContent />
         } 
       />
-      <Route 
-        path="/dashboard" 
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } 
-      />
+    
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
